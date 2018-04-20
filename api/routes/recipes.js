@@ -8,8 +8,13 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const ingredient = {
+        name: req.body.name,
+        duration:req.body.duration 
+    }
     res.status(201).json({
-        message : 'Post Recipes Request'
+        message : 'Post Recipes Request',
+        ingredient: ingredient
     })
 });
 

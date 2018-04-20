@@ -10,8 +10,14 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const ingredient = {
+        recipeId: req.body.recipeId,
+        name: req.body.name,
+        quantity:req.body.quantity 
+    }
     res.status(201).json({
-        message : 'Post Ingredient Request'
+        message : 'Post Ingredient Request',
+        ingredient: ingredient
     })
 });
 

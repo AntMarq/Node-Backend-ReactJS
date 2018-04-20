@@ -10,6 +10,22 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+
+// Handling CORS
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        "Access-Control-Allow-Headers", 
+        "Origin, X-Requested, Content-Type, Accept, Authorization"
+    );
+    if(res.method === 'OPTIONS'){
+        res.header('Accept-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+        return res.status(200).json({});
+    }
+    next();
+});
+
+
 // Routes which should handle request
 app.use('/recipes', recipesRoutes);
 app.use('/ingredients', ingredientsRoutes);

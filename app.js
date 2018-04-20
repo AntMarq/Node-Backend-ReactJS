@@ -2,9 +2,18 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 
 const recipesRoutes = require('./api/routes/recipes');
 const ingredientsRoutes = require('./api/routes/ingredients');
+
+// Set up default mongoose connection
+mongoose.connect('mongodb://localhost/db')
+// Get the default connection
+var db = mongoose.connection;
+// Bind connection to error event
+db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));

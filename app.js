@@ -15,6 +15,8 @@ var db = mongoose.connection;
 // Bind connection to error event
 db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
+mongoose.Promise = global.Promise;
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

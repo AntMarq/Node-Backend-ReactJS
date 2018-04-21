@@ -6,17 +6,31 @@ const Recipe = require('../models/recipe');
 
 router.get('/', (req, res, next) => {
     Recipe.find()
+        .select('name duration _id')
         .exec()
         .then(docs => {
-            console.log(docs);
-            if(docs.length >= 0){
-                res.status(200).json(docs);
-            }
-            else{
-                res.status(404).json({
-                    message: "No entries found"
+            const response = {
+                count: docs.length,
+                recipes: docs.map(doc => {
+                    return {
+                        name: doc.name,
+                        duration: doc.duration,
+                        _id: doc._id,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:3000/recipes/' + doc._id
+                        }
+                    }
                 })
-            }
+            };
+           // if(docs.length >= 0){
+                res.status(200).json(response);
+            //}
+            // else{
+            //     res.status(404).json({
+            //         message: "No entries found"
+            //     })
+            // }
         })
         .catch(err => {
             console.log(err);
@@ -37,8 +51,17 @@ router.post('/', (req, res, next) => {
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message : 'Handling Post request to /recipes',
-                createdIngredient: result
+                message : 'Create recipe successfully',
+                createdRecipe: {
+                    name: result.name,
+                    duration: result.duration,
+                    _id: result._id,
+                    request: {
+                        type: 'GET',
+                        url: "http://localhost:3000/recipes/" + result._id
+                    }
+
+                }
             })
         })
         .catch(err => {
@@ -52,11 +75,18 @@ router.post('/', (req, res, next) => {
 router.get('/:recipeId', (req, res, next) => {
     const id = req.params.recipeId;
     Recipe.findById(id)
+        .select('name duration _id')
         .exec()
         .then(doc => {
             console.log("From database", doc);
             if(doc) {
-                res.status(200).json(doc);
+                res.status(200).json({
+                    recipe: doc,
+                    request: {
+                        type: 'GET',
+                        url: 'http://loclahost:3000/recipes'
+                    }
+                });
             } else {
                 res.status(404).json({
                     message: "No valid entry found for provided ID"
@@ -76,10 +106,16 @@ router.patch('/:recipeId', (req, res, next) => {
         updateOps[ops.propName] = ops.value;
     }
     Recipe.update({ _id: id }, { $set: updateOps})
+        .select('name duration _id')
         .exec()
         .then(result => {
-            console.log(result);
-            res.status(200).json(result);
+            res.status(200).json({
+                message: "Recipe updated",
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:3000/recipes/' + id
+                    }
+            });
         }).catch(err => {
             console.log(err);
             res.status(500).json({error: err});
@@ -91,7 +127,14 @@ router.delete('/:recipeId', (req, res, next) => {
     Recipe.remove({ _id: id})
         .exec()
         .then(result => {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'Delete reciped',
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:3000/recipes/',
+                    data: { name: 'String', duration: 'Number'}
+                }
+            });
         })
         .catch(err => {
             console.log(err);

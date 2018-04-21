@@ -6,6 +6,7 @@ const recipeSchema = mongoose.Schema({
         type: Number,
         default: 1
     },
+    recipeImage: { type: String, required: true},
     ingredient: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient', required: true
     }

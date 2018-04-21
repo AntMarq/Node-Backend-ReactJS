@@ -5,7 +5,8 @@ const ingredientSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
-    }
+    },
+    ingredientImage: { type: String, required: true}
 });
 
 module.exports = mongoose.model('Ingredient', ingredientSchema);

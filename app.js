@@ -18,6 +18,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 

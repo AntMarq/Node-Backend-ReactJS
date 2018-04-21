@@ -1,12 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-
 const Ingredient = require('../models/ingredient');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, './uploads/ingredients/');
+    },
+    filename: function(req, file, cb){
+        cb(null, new Date().toISOString() + '_' + file.originalname);
+    }
+});
+
+const fileFilter = function(req, file, cb){
+    if(file.mimetype === 'image/jpeg' || ile.mimetype === 'image/png'){
+        cb(null, true);
+    }
+    cb(null, false);
+}
+
+const upload = multer({storage: storage, 
+    limits: {
+        fileSize: 1024 * 1024 * 0.05
+    },
+    fileFilter: fileFilter
+});
 
 router.get('/', (req, res, next) => {
     Ingredient.find()
-        .select('name _id')
+        .select('name _id ingredientImage')
         .exec()
         .then(docs => {
             const response = {
@@ -15,6 +38,7 @@ router.get('/', (req, res, next) => {
                     return {
                         name: doc.name,
                         _id: doc._id,
+                        ingredientImage: doc.ingredientImage,
                         request: {
                             type: 'GET',
                             url: 'http://localhost:3000/ingredients/' + doc._id
@@ -39,10 +63,12 @@ router.get('/', (req, res, next) => {
         })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('ingredientImage'), (req, res, next) => {
+    console.log(req.file);
     const ingredient = new Ingredient({
         _id: new mongoose.Types.ObjectId(),
-        name: req.body.name
+        name: req.body.name,
+        ingredientImage: req.file.path
     });
     ingredient
         .save()
@@ -72,7 +98,7 @@ router.post('/', (req, res, next) => {
 router.get('/:ingredientId', (req, res, next) => {
     const id = req.params.recipeId;
     Recipe.findById(id)
-        .select('name  _id')
+        .select('name _id ingredientImage')
         .exec()
         .then(doc => {
             console.log("From database", doc);

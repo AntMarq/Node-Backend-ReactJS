@@ -4,12 +4,35 @@ const mongoose = require('mongoose');
 
 const Recipe = require('../models/recipe');
 const Ingredient = require('../models/ingredient');
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, './uploads/recipes/');
+    },
+    filename: function(req, file, cb){
+        cb(null, new Date().toISOString() + '_' + file.originalname);
+    }
+});
+
+const fileFilter = function(req, file, cb){
+    if(file.mimetype === 'image/jpeg' || ile.mimetype === 'image/png'){
+        cb(null, true);
+    }
+    cb(null, false);
+}
+
+const upload = multer({storage: storage, 
+    limits: {
+        fileSize: 1024 * 1024 * 1   
+    },
+    fileFilter: fileFilter
+});
 
 // Handle incoming GET request to /recipes
 router.get('/', (req, res, next) => {
     Recipe.find()
-        .select('ingredient quantity _id')
+        .select('ingredient quantity _id recipeImage')
         .populate('ingredient', 'name')
         .exec()
         .then(docs => {
@@ -19,6 +42,7 @@ router.get('/', (req, res, next) => {
                     return {
                         _id: doc._id,
                         ingredient: doc.ingredient,
+                        recipeImage: doc.recipeImage,
                         request: {
                             type: 'GET',
                             url: 'http://localhost:3000/recipes/' + doc._id
@@ -34,7 +58,8 @@ router.get('/', (req, res, next) => {
         });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('recipeImage'), (req, res, next) => {
+    console.log(req.file);
     Ingredient.findById(req.body.ingredientId)
         .then(ingredient => {
             if(!ingredient){
@@ -46,8 +71,8 @@ router.post('/', (req, res, next) => {
                 _id: mongoose.Types.ObjectId(),
                 name: req.body.name,
                 quantity: req.body.quantity,
-                ingredient: req.body.ingredientId
-        
+                ingredient: req.body.ingredientId,
+                recipeImage: req.file.path
             });
             return recipe.save();
         })

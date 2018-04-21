@@ -10,6 +10,7 @@ const Ingredient = require('../models/ingredient');
 router.get('/', (req, res, next) => {
     Recipe.find()
         .select('ingredient quantity _id')
+        .populate('ingredient', 'name')
         .exec()
         .then(docs => {
             res.status(200).json({
@@ -75,6 +76,7 @@ router.post('/', (req, res, next) => {
 
 router.get('/:recipeId', (req, res, next) => {
     Recipe.findById(req.params.recipeId)
+    .populate('ingredient')
     .exec()
     .then(recipe => {
         if(!recipe){

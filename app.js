@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 
-const recipesRoutes = require('./api/routes/recipes');
 const ingredientsRoutes = require('./api/routes/ingredients');
+const recipesRoutes = require('./api/routes/recipes');
 
 // Set up default mongoose connection
 mongoose.connect('mongodb://localhost/db')

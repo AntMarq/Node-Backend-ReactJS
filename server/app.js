@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 
 const ingredientsRoutes = require('./api/routes/ingredients');
 const recipesRoutes = require('./api/routes/recipes');
+const usersRoutes = require('./api/routes/users');
+
 
 // Set up default mongoose connection
 mongoose.connect('mongodb://localhost/db')
@@ -41,6 +43,8 @@ app.use((req, res, next) => {
 // Routes which should handle request
 app.use('/recipes', recipesRoutes);
 app.use('/ingredients', ingredientsRoutes);
+app.use('/user', usersRoutes);
+
 
 app.use((req, res, next) => {
     const error = new Error('Not found');

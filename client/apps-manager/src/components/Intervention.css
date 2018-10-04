@@ -1,0 +1,42 @@
+.intervention:hover {
+    cursor: pointer;
+    background-color: #e9eaed !important;
+}
+
+.no-events {
+    border: 1px solid rgba(112, 123, 164, 1) !important;
+    background-color: transparent !important;
+    color: white !important;
+}
+
+.event-button:hover:not(.no-events) {
+    cursor: pointer;
+    background-color: #FFF4EA !important;
+}
+
+
+.intervention-open::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 8px solid white;
+    bottom: -8px;
+    left: 63px;
+}
+
+.intervention-open:hover::after {
+    border-top: 8px solid #FFF4EA !important;
+}
+
+.intervention-pdf-icon:hover {
+    width: 25px;
+}
+
+.status-0 {
+    color: #abb4c2;
+}.status-2 {
+    color: #6fb805;
+}

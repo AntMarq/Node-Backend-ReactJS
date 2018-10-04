@@ -1,0 +1,8 @@
+.event:hover {
+    cursor: pointer;
+    background-color: #e9eaed !important;
+}
+
+.event:last-child {
+    border-bottom: 1px solid rgba(219, 221, 236, 1);
+}

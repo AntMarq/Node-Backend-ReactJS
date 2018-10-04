@@ -3,3 +3,87 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+@font-face {
+  font-family: din;
+  font-weight: 300;
+  src: url("assets/fonts/DINNextLTPro-LightCondensed.otf") format("opentype");
+}
+
+@font-face {
+  font-family: dinMedium;
+  font-weight: 500;
+  src: url("assets/fonts/DINNextLTPro-MediumCond.otf") format("opentype");
+}
+
+@font-face {
+  font-family: dinRegular;
+  font-weight: 500;
+  src: url("assets/fonts/DINNextLTPro-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: dinBold;
+  font-weight: "bold";
+  src: url("assets/fonts/DINNextLTPro-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: robotoLight;
+  font-weight: 300;
+  src: url("assets/fonts/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: robotoMedium;
+  font-weight: 500;
+  src: url("assets/fonts/Roboto-Medium.ttf");
+}
+
+@font-face {
+  font-family: robotoRegular;
+  font-weight: 400;
+  src: url("assets/fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+  font-family: robotoBold;
+  font-weight: 700;
+  src: url("assets/fonts/Roboto-Bold.ttf");
+}
+
+@font-face {
+  font-family: robotoItalic;
+  font-style: italic;
+  src: url("assets/fonts/Roboto-Italic.ttf");
+}
+
+@font-face {
+  font-family: robotoBlack;
+  font-weight: 900;
+  src: url("assets/fonts/Roboto-Black.ttf");
+}
+
+
+html, body {
+  
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  height: 100%;
+  
+}
+button:focus {outline:0 !important;}
+
+#root{
+  font-family: robotoLight;
+  height: 100%;
+}
+
+button{
+  border-width: 0 !important;
+}
+
+.alert-dismissible .close{
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}

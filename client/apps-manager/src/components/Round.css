@@ -1,0 +1,10 @@
+.round-open {
+    background-color: #263267 !important;
+    color: white !important;
+}
+
+.round:hover:not(.round-open) {
+    background-color: #e9eaed !important;
+    border: transparent 1px solid !important;
+}
+

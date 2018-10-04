@@ -24,7 +24,6 @@ app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-
 // Handling CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -43,7 +42,7 @@ app.use((req, res, next) => {
 // Routes which should handle request
 app.use('/recipes', recipesRoutes);
 app.use('/ingredients', ingredientsRoutes);
-app.use('/user', usersRoutes);
+app.use('/users', usersRoutes);
 
 
 app.use((req, res, next) => {

@@ -22,7 +22,8 @@ exports.users_signup = (req, res, next) => {
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
                             email: req.body.email,
-                            password: hash
+                            password: hash,
+                            admin: req.body.admin
                         });
                         user
                             .save()
@@ -45,48 +46,53 @@ exports.users_signup = (req, res, next) => {
 }
 
 exports.users_login = (req, res, next) => {
-    console.log('login');
+    console.log('login = ' + req.body.email);
+    console.log('password = ' + req.body.password);
 
     User.find({
         email: req.body.email
     })
     .exec()
     .then(user => {
+        console.log('user = ' + user);
+        // console.log('password = ' , req.body.password, "user password = " , user[0].password);
+
         if(user.length < 1){
             res.status(401).json({
-                message: 'Auth failed 1'
+                message: 'User not found'
             });
         }
-        console.log('password = ' , req.body.password, "user password = " , user[0].password);
-
-        bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-            if(err){
-                return res.status(401).json({
-                    message: 'Auth failed 2'
+        else {
+            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+                if(err){
+                    return res.status(401).json({
+                        message: 'Auth failed 2'
+                    });
+                }
+                console.log('process.env.JWT_KEY = ' , process.env.JWT_KEY);
+    
+                if(result){
+                    const token = jwt.sign(
+                        {
+                            email: user[0].email,
+                            userId: user[0]._id,
+                            admin: user[0].admin
+                        }, 
+                        process.env.JWT_KEY, 
+                        {
+                            expiresIn: "1h"
+                        }
+                    );
+                    return res.status(200).json({
+                        message: 'Auth successful',
+                        token: token
+                    });
+                }
+                res.status(401).json({
+                    message: 'Auth failed 3'
                 });
-            }
-            console.log('process.env.JWT_KEY = ' , process.env.JWT_KEY);
-
-            if(result){
-                const token = jwt.sign(
-                    {
-                        email: user[0].email,
-                        userId: user[0]._id
-                    }, 
-                    process.env.JWT_KEY, 
-                    {
-                        expiresIn: "1h"
-                    }
-                );
-                return res.status(200).json({
-                    message: 'Auth successful',
-                    token: token
-                });
-            }
-            res.status(401).json({
-                message: 'Auth failed 3'
             });
-        });
+        }
     })
     .catch(err => {
         console.log(err);
@@ -109,4 +115,31 @@ exports.users_delete = (req, res, next) => {
                 error: err
             });
         })
+}
+
+exports.users_get_all = (req, res, next) => {
+    User.find()
+        .select('email _id admin')
+        .exec()
+        .then(docs => {
+            res.status(200).json({
+                count: docs.length,
+                users: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        email: doc.email,
+                        admin: doc.admin,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:3000/recipes/' + doc._id
+                        }
+                    }
+                })
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
 }

@@ -20,7 +20,8 @@ export const doLogin=(l,p)=> new Promise((res, rej)=>{
     )
         .then(
             (d)=>{
-                ACCESS_TOKEN = d;
+                console.log("token = ", JSON.parse(d).token)
+                ACCESS_TOKEN = JSON.parse(d).token;
                 __headers.Authorization = d;
                 res(jwtDecode(d));
             }
@@ -32,12 +33,15 @@ export const doLogin=(l,p)=> new Promise((res, rej)=>{
         )
 });
 
-export const fetchAllRounds = () => new Promise((res, rej) =>{
-    fetch(URL.host+"/api/tournee", {
+export const fetchAllRecipes = () => new Promise((res, rej) =>{
+    let token = getAccessToken();
+    console.log("token = ", token);
+    fetch(URL.host+"/recipes", {
         method:'GET',
-        headers:{
-            ...__headers
-        }
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
+          }
     }).then(
         (resp)=>{
             if(resp.status !== 200) return Promise.reject(resp.status);

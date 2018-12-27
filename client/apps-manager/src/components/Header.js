@@ -13,7 +13,7 @@ class Header extends Component {
                 <img src={logo} style={{marginLeft: 34}}/>
                 <div style={{fontFamily: 'dinMedium', fontSize: '18', paddingLeft: 10}}>SUIVIS DES TOURNÉES :</div>
                 <div style={{flex: 1, paddingLeft: 5, fontFamily: 'din', fontSize: '17'}}>{_txt}</div>
-                <div style={{fontFamily: 'din', fontSize: '18'}}>{this.props.agenceName.toUpperCase()}</div>
+                <div style={{fontFamily: 'dinMedium', fontSize: '18'}}>{this.props.agenceName}</div>
                 <div style={{padding: '0 25px', color: colors.LIGHT_GREEN, fontFamily: 'dinMedium', fontSize: '18'}}>
                     <UncontrolledDropdown >
                         <DropdownToggle caret style={{padding: '0 25px', color: colors.LIGHT_GREEN, 

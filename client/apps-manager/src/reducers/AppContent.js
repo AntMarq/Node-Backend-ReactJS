@@ -1,8 +1,10 @@
+//reducer.js
+
 import {push} from 'react-router-redux';
-import {act_dataLoaded, act_onLoginFailed, act_onLoginSuccess, act_initAppData, act_onFetchEvenementSuccess, act_onFetchInterventionSuccess, act_onSelectIntervention, act_goToTournees} from '../actions';
+import {act_dataLoaded, act_onLoginFailed, act_onLoginSuccess,act_get_All_Recipes,act_onAllRecipesSuccess, act_onFetchEvenementSuccess, act_onFetchInterventionSuccess, act_onSelectIntervention, act_goToTournees} from '../actions';
 import {STORAGE_KEYS, ROLES} from '../constants';
 import {RealTimeProvider} from '../providers/RealTimeProvider';
-import {doLogin, fetchAllRounds, fetchIntervention, fetchEvenement, fetchPdfInterId} from '../services/WebServices';
+import {doLogin, fetchAllRecipes, fetchIntervention, fetchEvenement, fetchPdfInterId} from '../services/WebServices';
 import {THEME} from '../style';
 import {updateInterventionStatus, updateEvenement, isTourneeOpen, isInterventionOpen, findTourneeFromInterventionId, showPdf} from '../utils';
 
@@ -30,27 +32,30 @@ const reducer = (state, action)=>{
             selectedRound: {},
             selectedIntervention: {},
             notifs:[],
-            selectedPhoto: {}
+            selectedPhoto: {},
+            recipes:[]
         };
     }
 
     switch(action.type){
-        case 'INIT_DATA':
-            Promise.all([fetchAllRounds()]).then(
-                (results)=>{
-                    action.asyncDispatch(act_dataLoaded(results[0]));
-                }
-            )
-            return {...state};
-        break;
-        case 'DATA_LOADED':
-            RealTimeProvider.start(state.agenceId);
-            action.asyncDispatch(push('/home'));
-            let _interventions = [];
-            action.rounds.forEach(round => _interventions = _interventions.concat(round.interventions));
-            action.rounds.sort((a, b) => {return new Date(a.date) > new Date(b.date)});
-            return {...state,  isLoggingIn:false, rounds: action.rounds, interventions: _interventions};
-        break;
+        // case 'INIT_DATA':
+        //     console.log("INIT_DATA");
+        //     Promise.all([fetchAllRecipes()]).then(
+        //         (results)=>{
+        //             action.asyncDispatch(act_dataLoaded(results[0]));
+        //         }
+        //     )
+        //     return {...state};
+        // break;
+        // case 'DATA_LOADED':
+        // console.log("DATA_LOADED");
+        //     RealTimeProvider.start(state.agenceId);
+        //     action.asyncDispatch(push('/home'));
+        //     let _interventions = [];
+        //     action.rounds.forEach(round => _interventions = _interventions.concat(round.interventions));
+        //     action.rounds.sort((a, b) => {return new Date(a.date) > new Date(b.date)});
+        //     return {...state,  isLoggingIn:false, rounds: action.rounds, interventions: _interventions};
+        // break;
         case 'RESET_PWD_BACK_REQUEST':
             action.asyncDispatch(push('/login'));
             return {...state};
@@ -107,6 +112,19 @@ const reducer = (state, action)=>{
             // }
             return {...state, ..._ret};
         break;
+        case 'GET_ALL_RECIPES' :
+            console.log("coucou");
+            fetchAllRecipes(action.p).then((data)=>{
+                    console.log("recipes = ", data);
+                    action.asyncDispatch(act_onAllRecipesSuccess(data))
+            })
+            .catch((err)=>{
+                action.asyncDispatch(act_onLoginFailed(err)
+                )}
+            );
+            return {...state}
+        break;
+
         case 'REALTIME_UPDATE_INTER':
             let _round  = state.selectedRound;
             let _selectedInter = state.selectedIntervention;

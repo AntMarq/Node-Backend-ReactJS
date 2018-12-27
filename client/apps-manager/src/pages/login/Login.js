@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, CardBody, CardTitle, Form, FormGroup, Label, Input} from 'reactstrap';
-import {act_emailChanged, act_kmlChanged, act_doLogin} from '../actions';
-import spinner from '../assets/spinner.gif';
-import suezLogo from '../assets/suezLogoWithName.svg';
+import {act_emailChanged, act_kmlChanged, act_doLogin} from '../../actions';
+import spinner from '../../assets/spinner.gif';
+import suezLogo from '../../assets/suezLogoWithName.svg';
 import './Login.css';
 
 

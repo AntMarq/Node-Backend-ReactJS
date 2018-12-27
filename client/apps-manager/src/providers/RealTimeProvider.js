@@ -1,3 +1,4 @@
+//Specific
 import EventBus from 'vertx3-eventbus-client';
 import {act_onRT_InterUpdate, act_onRT_EventUpdate} from '../actions';
 import {URL} from '../constants';
@@ -24,7 +25,6 @@ export const RealTimeProvider = {
             });
         }
     },
-
     close : (agenceId)=>{
         this._eb.unregisterHandler('rt-data.'+agenceId, (error, message)=>{
         });

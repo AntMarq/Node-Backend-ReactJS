@@ -1,10 +1,4 @@
 //  ####### INIT #######
-export const act_initAppData = ()=>{
-    return {
-        type : 'INIT_DATA'
-    }
-};
-
 export const act_dataLoaded = (rounds)=>{
     return {
         type:'DATA_LOADED', rounds
@@ -47,6 +41,19 @@ export const act_signOut = () => {
         type: 'SIGNOUT'
     }
 };
+
+// ###### HOME PAGE ########
+export const act_get_All_Recipes=(p)=>{
+    return {
+        type:'GET_ALL_RECIPES', p
+    }
+};
+
+export const act_onAllRecipesSuccess=(data)=>{
+    return {
+        type:'GET_ALL_RECIPES_SUCCESS', data
+    }
+}
 
 //  ####### REALTIME #######
 export const act_onRT_InterUpdate=(frame)=>{

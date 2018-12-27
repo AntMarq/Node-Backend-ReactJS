@@ -1,3 +1,4 @@
+//App.js
 import React from 'react';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
@@ -12,7 +13,7 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import Cerbere from './components/Cerbere';
 import AsyncDispatchMiddleware from './middleware';
-import LoginPage from './pages/Login';
+import LoginPage from './pages/login/Login';
 import HomePage from './pages/home';
 import {RealTimeProvider} from './providers/RealTimeProvider';
 import AppStore from './reducers';
